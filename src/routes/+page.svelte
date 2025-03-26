@@ -1,7 +1,6 @@
 <script lang="ts">
 	import type { PageData } from './$types';
-	import Button from '$lib/components/ui/Button.svelte';
-	import ReviewCard from '$lib/components/ui/ReviewCard.svelte';
+	import { Button, ReviewCard } from '$lib';
 	export let data: PageData;
 
 	let featuredReviews = data.featuredReviews.sort((a, b) => parseInt(b.id) - parseInt(a.id)); // id 내림차순 정렬

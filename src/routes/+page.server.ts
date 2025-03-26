@@ -25,7 +25,7 @@ export const load: PageServerLoad = async ({ locals }) => {
       {
         id: '3',
         title: '쇼코의 미소',
-        rating: 4.7,
+        rating: 4.0,
         tag: '도서',
         author: '박리뷰어',
         excerpt: '멀지만 가까운 두 사람에게서 느낀 색다른 감정',
