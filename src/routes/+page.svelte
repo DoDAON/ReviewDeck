@@ -3,7 +3,9 @@
 	import { Button, ReviewCard } from '$lib';
 	export let data: PageData;
 
-	let featuredReviews = data.featuredReviews.sort((a, b) => parseInt(b.id) - parseInt(a.id)); // id 내림차순 정렬
+	let featuredReviews = data.featuredReviews
+		.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()) // 날짜 기준 내림차순 정렬
+		.slice(0, 3); // 최대 3개만 선택
 </script>
 
 <div class="min-h-screen bg-[#F9FAFB]">
