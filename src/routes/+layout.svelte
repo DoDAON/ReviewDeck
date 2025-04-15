@@ -1,6 +1,7 @@
 <script lang="ts">
 	import '../app.css';
 	import { slide, fade } from 'svelte/transition';
+	import Button from '$lib/components/ui/Button.svelte';
 
 	let isMobileMenuOpen = false;
 
@@ -36,11 +37,11 @@
 			<div class="flex h-16 items-center justify-between">
 				<div class="flex items-center">
 					<div class="lg:hidden">
-						<button
-							type="button"
-							class="btn-ghost rounded-lg p-2 transition-colors duration-200 hover:bg-gray-100"
-							aria-label="메인 메뉴"
+						<Button
+							variant="ghost"
+							size="sm"
 							on:click={toggleMobileMenu}
+							className="p-2"
 						>
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
@@ -56,7 +57,7 @@
 									d="M4 6h16M4 12h8m-8 6h16"
 								/>
 							</svg>
-						</button>
+						</Button>
 					</div>
 					<a href="/" class="ml-2 text-xl font-bold text-gray-900">Review<span class="text-[#059669]">Deck</span></a>
 				</div>
@@ -65,7 +66,9 @@
 					<a href="/about" class="text-gray-700 hover:text-gray-900">About</a>
 				</div>
 				<div>
-					<a href="/login" class="btn btn-primary bg-[#059669]">로그인</a>
+					<Button href="/login" variant="primary">
+						로그인
+					</Button>
 				</div>
 			</div>
 		</div>

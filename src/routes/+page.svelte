@@ -23,7 +23,7 @@
 					>
 				</p>
 				<div class="flex flex-col sm:flex-row justify-center gap-4">
-					<Button href="/reviews" variant="primary" showArrow={true}>
+					<Button href="/reviews" variant="primary">
 						리뷰 둘러보기
 					</Button>
 					<Button href="/about" variant="secondary">
