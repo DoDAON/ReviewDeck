@@ -2,6 +2,7 @@
   import { page } from '$app/stores';
   import ReviewCard from '$lib/components/review/ReviewCard.svelte';
   import FilterSection from '$lib/components/review/FilterSection.svelte';
+  import RatingGraph from '$lib/components/review/RatingGraph.svelte';
   
   interface Review {
     id: string;
@@ -25,11 +26,21 @@
   let selectedTag: string | null = null;
   let searchQuery = '';
   let sortBy = 'newest'; // 'newest', 'rating', 'title'
+  let selectedRating: number | null = null;
   
   $: filteredReviews = reviews
     .filter((review: Review) => {
       // 태그 필터링
       if (selectedTag && review.tag !== selectedTag) return false;
+      
+      // 평점 필터링
+      if (selectedRating !== null) {
+        if (selectedRating === 4.5) {
+          if (review.rating < 4.5) return false;
+        } else {
+          if (review.rating < selectedRating || review.rating >= selectedRating + 0.5) return false;
+        }
+      }
       
       // 검색어 필터링
       if (searchQuery) {
@@ -89,6 +100,14 @@
 
 <div class="container mx-auto px-4 py-8">
   <h1 class="text-3xl font-bold text-gray-900 mb-8">리뷰 목록</h1>
+  
+  <!-- 평점 그래프 -->
+  <div class="max-w-4xl mx-auto">
+    <RatingGraph 
+      reviews={reviews}
+      bind:selectedRating
+    />
+  </div>
   
   <!-- 필터 섹션 -->
   <FilterSection
