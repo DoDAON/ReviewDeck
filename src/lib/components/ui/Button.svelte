@@ -1,22 +1,38 @@
 <script lang="ts">
-  export let href: string = '/';
-  export let variant: 'primary' | 'secondary' = 'primary';
-  export let showArrow: boolean = false;
+  export let variant: 'primary' | 'secondary' | 'ghost' = 'primary';
+  export let size: 'sm' | 'md' | 'lg' = 'md';
+  export let href: string | undefined = undefined;
+  export let disabled = false;
+  export let type: 'button' | 'submit' = 'button';
+  export let className = '';
+
+  const variantClasses = {
+    primary: 'bg-[#059669] text-white hover:bg-[#047857]',
+    secondary: 'bg-gray-100 text-gray-900 hover:bg-gray-200',
+    ghost: 'bg-transparent text-gray-700 hover:bg-gray-100'
+  };
+
+  const sizeClasses = {
+    sm: 'px-3 py-1.5 text-sm',
+    md: 'px-4 py-2',
+    lg: 'px-6 py-3 text-lg'
+  };
 </script>
 
-<a
-  {href}
-  class="inline-flex transform items-center rounded-lg px-8 py-4 text-lg font-medium
-    shadow-lg transition-all duration-200 hover:scale-105 hover:shadow-xl
-    focus:outline-none focus:ring-2 focus:ring-offset-2
-    {variant === 'primary' 
-      ? 'bg-[#059669] text-white hover:bg-[#047857] focus:ring-[#34D399]' 
-      : 'bg-[#E5E7EB] text-[#4B5563] hover:bg-[#9CA3AF] hover:text-white focus:ring-[#9CA3AF]'}"
->
-  <slot />
-  {#if showArrow}
-    <svg class="ml-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-    </svg>
-  {/if}
-</a> 
+{#if href}
+  <a
+    href={href}
+    class="inline-flex items-center justify-center rounded-md font-medium transition-colors {variantClasses[variant]} {sizeClasses[size]} {className} {disabled ? 'opacity-50 cursor-not-allowed' : ''}"
+  >
+    <slot />
+  </a>
+{:else}
+  <button
+    {type}
+    class="inline-flex items-center justify-center rounded-md font-medium transition-colors {variantClasses[variant]} {sizeClasses[size]} {className}"
+    {disabled}
+    on:click
+  >
+    <slot />
+  </button>
+{/if} 

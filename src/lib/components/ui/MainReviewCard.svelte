@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Button } from '$lib';
+  import { Button, Card } from '$lib';
   
   export let review: {
     id: string;
@@ -11,7 +11,7 @@
   };
 </script>
 
-<div class="overflow-hidden rounded-lg border border-[#E5E7EB] bg-white shadow-lg">
+<Card className="border border-[#E5E7EB]" padding="p-0">
   <div class="p-6">
     <div class="mb-4 flex items-center justify-between">
       <div class="flex items-center gap-1">
@@ -33,7 +33,7 @@
       </Button>
     </div>
   </div>
-</div>
+</Card>
 
 <style>
   .line-clamp-2 {

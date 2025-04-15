@@ -1,9 +1,11 @@
 <script lang="ts">
 	import type { PageData } from './$types';
-	import { Button, ReviewCard } from '$lib';
+	import { Button, MainReviewCard } from '$lib';
 	export let data: PageData;
 
-	let featuredReviews = data.featuredReviews.sort((a, b) => parseInt(b.id) - parseInt(a.id)); // id 내림차순 정렬
+	let featuredReviews = data.featuredReviews
+		.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()) // 날짜 기준 내림차순 정렬
+		.slice(0, 3); // 최대 3개만 선택
 </script>
 
 <div class="min-h-screen bg-[#F9FAFB]">
@@ -21,7 +23,7 @@
 					>
 				</p>
 				<div class="flex flex-col sm:flex-row justify-center gap-4">
-					<Button href="/reviews" variant="primary" showArrow={true}>
+					<Button href="/reviews" variant="primary">
 						리뷰 둘러보기
 					</Button>
 					<Button href="/about" variant="secondary">
@@ -38,7 +40,7 @@
 			<h2 class="mb-12 text-center text-3xl font-bold text-[#1F2937]">최신 리뷰</h2>
 			<div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
 				{#each featuredReviews as review}
-					<ReviewCard {review} />
+					<MainReviewCard {review} />
 				{/each}
 			</div>
 		</div>
