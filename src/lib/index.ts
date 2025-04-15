@@ -3,6 +3,7 @@
 // UI Components
 export { default as Button } from './components/ui/Button.svelte';
 export { default as MainReviewCard } from './components/ui/MainReviewCard.svelte';
+export { default as Card } from './components/ui/Card.svelte';
 
 // Review Components
 export { default as CommentSection } from './components/review/CommentSection.svelte';

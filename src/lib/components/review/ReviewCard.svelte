@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { Card } from '$lib';
+  
   export let review: {
     id: string;
     title: string;
@@ -40,7 +42,7 @@
 </script>
 
 <a href="/reviews/{review.id}" class="block">
-  <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 h-[200px]">
+  <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-300 h-[200px]" padding="p-0">
     <div class="p-6 h-full flex flex-col">
       <div class="flex justify-between items-start mb-2">
         <h2 class="text-xl font-semibold text-gray-900 line-clamp-1 overflow-hidden">{review.title}</h2>
@@ -65,7 +67,7 @@
         </span>
       </div>
     </div>
-  </div>
+  </Card>
 </a>
 
 <style>
