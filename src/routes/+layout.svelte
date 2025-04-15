@@ -62,7 +62,6 @@
 				</div>
 				<div class="hidden lg:flex lg:items-center lg:space-x-8">
 					<a href="/reviews" class="text-gray-700 hover:text-gray-900">리뷰</a>
-					<a href="/dashboard" class="text-gray-700 hover:text-gray-900">대시보드</a>
 					<a href="/about" class="text-gray-700 hover:text-gray-900">About</a>
 				</div>
 				<div>
