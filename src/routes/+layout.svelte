@@ -1,7 +1,7 @@
 <script lang="ts">
 	import '../app.css';
 	import { slide, fade } from 'svelte/transition';
-	import Button from '$lib/components/ui/Button.svelte';
+	import { Button } from '$lib';
 
 	let isMobileMenuOpen = false;
 

@@ -1,7 +1,5 @@
 <script lang="ts">
-  import SearchBar from './SearchBar.svelte';
-  import TagFilter from './TagFilter.svelte';
-  import SortSelect from './SortSelect.svelte';
+  import { SearchBar, TagFilter, SortSelect } from '$lib';
   
   export let tags: string[];
   export let selectedTag: string | null = null;

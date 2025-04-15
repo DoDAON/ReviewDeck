@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { PageData } from './$types';
-	import { Button, ReviewCard } from '$lib';
+	import { Button, MainReviewCard } from '$lib';
 	export let data: PageData;
 
 	let featuredReviews = data.featuredReviews
@@ -40,7 +40,7 @@
 			<h2 class="mb-12 text-center text-3xl font-bold text-[#1F2937]">최신 리뷰</h2>
 			<div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
 				{#each featuredReviews as review}
-					<ReviewCard {review} />
+					<MainReviewCard {review} />
 				{/each}
 			</div>
 		</div>

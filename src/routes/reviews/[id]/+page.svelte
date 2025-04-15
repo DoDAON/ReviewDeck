@@ -1,7 +1,6 @@
 <script lang="ts">
   import { page } from '$app/stores';
-  import ReviewHeader from '$lib/components/review/ReviewHeader.svelte';
-  import CommentSection from '$lib/components/review/CommentSection.svelte';
+  import { ReviewHeader, CommentSection } from '$lib';
   
   interface Comment {
     id: string;

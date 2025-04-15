@@ -1,8 +1,6 @@
 <script lang="ts">
   import { page } from '$app/stores';
-  import ReviewCard from '$lib/components/review/ReviewCard.svelte';
-  import FilterSection from '$lib/components/review/FilterSection.svelte';
-  import RatingGraph from '$lib/components/review/RatingGraph.svelte';
+  import { ReviewCard, FilterSection, RatingGraph } from '$lib';
   
   interface Review {
     id: string;
