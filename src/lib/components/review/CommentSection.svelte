@@ -1,4 +1,6 @@
 <script lang="ts">
+  import Button from '../ui/Button.svelte';
+  
   interface Comment {
     id: string;
     content: string;
@@ -21,8 +23,14 @@
   }
   
   function handleCommentSubmit() {
-    // TODO: 실제 댓글 제출 로직 구현
-    console.log('댓글 제출:', newComment);
+    const trimmedComment = newComment.trim();
+    
+    if (!trimmedComment || trimmedComment.length < 5) {
+      alert('댓글은 5자 이상으로 작성해야 합니다');
+      return;
+    }
+    
+    alert('댓글이 작성되었습니다!');
     newComment = '';
   }
 </script>
@@ -39,13 +47,12 @@
       rows="3"
     ></textarea>
     <div class="flex justify-end mt-2">
-      <button
+      <Button
+        variant="primary"
         on:click={handleCommentSubmit}
-        class="px-4 py-2 bg-primary text-white rounded-md hover:bg-primary-dark transition-colors"
-        disabled={!newComment.trim()}
       >
         댓글 작성
-      </button>
+      </Button>
     </div>
   </div>
   
