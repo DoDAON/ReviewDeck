@@ -11,7 +11,7 @@
   };
 </script>
 
-<Card className="border border-[#E5E7EB]" padding="p-0">
+<Card className="border border-[#E5E7EB] hover:shadow-lg transition-shadow duration-300" padding="p-0">
   <div class="p-6">
     <div class="mb-4 flex items-center justify-between">
       <div class="flex items-center gap-1">
@@ -40,6 +40,7 @@
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
+    line-clamp: 2;
     overflow: hidden;
   }
 </style> 

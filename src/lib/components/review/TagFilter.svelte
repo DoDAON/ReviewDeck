@@ -20,9 +20,10 @@
 </script>
 
 <div>
-  <label class="block text-sm font-medium text-gray-700 mb-1">태그</label>
+  <label for="tag-filter" class="block text-sm font-medium text-gray-700 mb-1">태그</label>
   <div class="flex flex-wrap gap-2">
     <button
+      id="tag-filter"
       class="px-3 py-1 rounded-full text-sm {selectedTag === null ? 'bg-primary text-white' : 'bg-gray-100 text-gray-800'}"
       on:click={() => handleTagClick(null)}
     >

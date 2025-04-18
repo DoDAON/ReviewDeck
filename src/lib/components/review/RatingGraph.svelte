@@ -41,10 +41,20 @@
   
   let hoveredRating: number | null = null;
   let isMounted = false;
+  let shouldAnimate = false;
   
   onMount(() => {
     isMounted = true;
+    shouldAnimate = true;
   });
+
+  // reviews가 변경될 때마다 애니메이션 재실행
+  $: if (reviews && isMounted) {
+    shouldAnimate = false;
+    setTimeout(() => {
+      shouldAnimate = true;
+    }, 50);
+  }
   
   function handleClick(rating: number) {
     if (selectedRating === rating) {
@@ -73,7 +83,7 @@
               <div class="flex-1 w-full flex items-end">
                 <div 
                   class="w-full mx-auto transition-all duration-200"
-                  style="height: {isMounted ? heightPercentages[i] : 0}%"
+                  style="height: {shouldAnimate ? heightPercentages[i] : 0}%"
                 >
                   <div
                     class="w-full h-full rounded transition-colors duration-200 {
