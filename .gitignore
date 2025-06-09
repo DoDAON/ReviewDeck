@@ -21,3 +21,9 @@ Thumbs.db
 # Vite
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+
+/../generated/prisma
+
+# --- Prisma 예외 규칙 추가 ---
+!prisma/schema.prisma
+!prisma/migrations/
