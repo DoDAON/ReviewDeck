@@ -1,4 +1,4 @@
-import { fail, redirect } from '@sveltejs/kit';
+import { fail } from '@sveltejs/kit';
 import bcrypt from 'bcrypt';
 import { prisma } from '$lib/server/db';
 import type { Actions } from './$types';
