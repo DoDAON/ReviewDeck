@@ -1,12 +1,19 @@
 <script lang="ts">
     import { enhance } from '$app/forms';
     import { onMount } from 'svelte';
+    import { browser } from '$app/environment';
     import type { ActionData, PageData } from './$types';
 
     export let data: PageData;
     export let form: ActionData;
 
     let isLoading = false;
+    let rememberMe = false;
+    let emailValue = '';
+
+    // localStorage 키
+    const REMEMBER_EMAIL_KEY = 'reviewdeck_remember_email';
+    const REMEMBER_CHECKBOX_KEY = 'reviewdeck_remember_checkbox';
 
     // 입력 시 에러 메시지 초기화
     function clearError(field: 'email' | 'password') {
@@ -16,7 +23,39 @@
         }
     }
 
+    // 저장된 이메일과 체크박스 상태 불러오기
+    function loadRememberedData() {
+        if (browser) {
+            const savedEmail = localStorage.getItem(REMEMBER_EMAIL_KEY);
+            const savedCheckbox = localStorage.getItem(REMEMBER_CHECKBOX_KEY);
+            
+            if (savedEmail) {
+                emailValue = savedEmail;
+            }
+            
+            if (savedCheckbox === 'true') {
+                rememberMe = true;
+            }
+        }
+    }
+
+    // 이메일과 체크박스 상태 저장
+    function saveRememberedData(email: string, remember: boolean) {
+        if (browser) {
+            if (remember) {
+                localStorage.setItem(REMEMBER_EMAIL_KEY, email);
+                localStorage.setItem(REMEMBER_CHECKBOX_KEY, 'true');
+            } else {
+                localStorage.removeItem(REMEMBER_EMAIL_KEY);
+                localStorage.removeItem(REMEMBER_CHECKBOX_KEY);
+            }
+        }
+    }
+
     onMount(() => {
+        // 저장된 데이터 불러오기
+        loadRememberedData();
+        
         // 페이지 로드 시 이메일 입력창에 포커스
         const emailInput = document.getElementById('email');
         if (emailInput) {
@@ -40,6 +79,17 @@
                 isLoading = true;
                 return async ({ result, update }) => {
                     isLoading = false;
+                    
+                    // 로그인 성공 시 아이디 저장 처리
+                    if (result.type === 'redirect') {
+                        const formElement = document.querySelector('form');
+                        if (formElement) {
+                            const formData = new FormData(formElement);
+                            const email = formData.get('email') as string;
+                            saveRememberedData(email, rememberMe);
+                        }
+                    }
+                    
                     await update();
                 };
             }}
@@ -52,7 +102,7 @@
                         id="email"
                         name="email"
                         type="email"
-                        value={form?.email ?? ''}
+                        bind:value={emailValue}
                         on:input={() => clearError('email')}
                         class="appearance-none rounded-lg relative block w-full px-3 py-2 border border-light focus:outline-none focus:ring-primary focus:border-primary focus:z-10 sm:text-sm"
                         placeholder="이메일 주소"
@@ -83,6 +133,7 @@
                         id="remember-me"
                         name="rememberMe"
                         type="checkbox"
+                        bind:checked={rememberMe}
                         class="h-4 w-4 text-primary focus:ring-primary border-light rounded"
                     />
                     <label for="remember-me" class="ml-2 block text-sm text-dark">
