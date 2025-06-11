@@ -54,6 +54,9 @@
 		}
 	}
 
+	// 프로필 페이지 경로 결정 함수
+	$: profilePath = data.user?.role === 'admin' ? '/admin' : '/profile';
+
 	// 모바일 메뉴가 열려있을 때 스크롤 방지
 	$: if (typeof document !== 'undefined') {
 		if (isMobileMenuOpen) {
@@ -141,11 +144,11 @@
 								transition:slide={{ duration: 150 }}
 							>
 								<a
-									href="/dashboard"
+									href={profilePath}
 									class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
 									on:click={() => showUserMenu = false}
 								>
-									대시보드
+									{data.user?.role === 'admin' ? '관리자 페이지' : '프로필'}
 								</a>
 								<button
 									on:click={handleLogout}
@@ -178,11 +181,11 @@
 						리뷰
 					</a>
 					<a
-						href="/dashboard"
+						href={profilePath}
 						class="block rounded-lg px-4 py-3 text-gray-700 transition-colors duration-200 hover:bg-gray-50"
 						on:click={toggleMobileMenu}
 					>
-						대시보드
+						{data.user?.role === 'admin' ? '관리자 페이지' : '프로필'}
 					</a>
 					<a
 						href="/about"
