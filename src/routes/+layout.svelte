@@ -2,11 +2,56 @@
 	import '../app.css';
 	import { slide, fade } from 'svelte/transition';
 	import { Button } from '$lib';
+	import { invalidateAll } from '$app/navigation';
+
+	interface User {
+		id: string;
+		email: string;
+		name: string;
+		role: string;
+	}
+
+	interface LayoutData {
+		user: User | null;
+		isAuthenticated: boolean;
+	}
+
+	export let data: LayoutData;
 
 	let isMobileMenuOpen = false;
+	let showUserMenu = false;
 
 	function toggleMobileMenu() {
 		isMobileMenuOpen = !isMobileMenuOpen;
+	}
+
+	function toggleUserMenu() {
+		showUserMenu = !showUserMenu;
+	}
+
+	async function handleLogout() {
+		try {
+			const response = await fetch('/api/logout', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			});
+			
+			if (response.ok) {
+				showUserMenu = false;
+				await invalidateAll(); // 모든 데이터를 다시 로드
+			}
+		} catch (error) {
+			console.error('Logout failed:', error);
+		}
+	}
+
+	// 외부 클릭 시 메뉴 닫기
+	function handleOutsideClick() {
+		if (showUserMenu) {
+			showUserMenu = false;
+		}
 	}
 
 	// 모바일 메뉴가 열려있을 때 스크롤 방지
@@ -19,7 +64,7 @@
 	}
 </script>
 
-<div class="min-h-screen bg-white">
+<div class="min-h-screen bg-white" on:click={handleOutsideClick} on:keydown={handleOutsideClick} role="presentation">
 	{#if isMobileMenuOpen}
 		<!-- 배경 오버레이 -->
 		<div
@@ -74,10 +119,47 @@
 					<a href="/reviews" class="text-gray-700 hover:text-gray-900">리뷰</a>
 					<a href="/about" class="text-gray-700 hover:text-gray-900">About</a>
 				</div>
-				<div>
-					<Button href="/login" variant="primary">
-						로그인
-					</Button>
+				<div class="relative">
+					{#if data.isAuthenticated && data.user}
+						<button
+							on:click|stopPropagation={toggleUserMenu}
+							class="flex items-center text-gray-700 hover:text-gray-900 font-medium"
+						>
+							안녕하세요, <span class="font-bold">{data.user.name}</span>님
+							<svg class="ml-1 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+							</svg>
+						</button>
+						
+						{#if showUserMenu}
+							<div
+								class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50"
+								on:click|stopPropagation
+								on:keydown|stopPropagation
+								role="menu"
+								tabindex="-1"
+								transition:slide={{ duration: 150 }}
+							>
+								<a
+									href="/dashboard"
+									class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+									on:click={() => showUserMenu = false}
+								>
+									대시보드
+								</a>
+								<button
+									on:click={handleLogout}
+									class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+								>
+									로그아웃
+								</button>
+							</div>
+						{/if}
+					{:else}
+						<Button href="/login" variant="primary">
+							로그인
+						</Button>
+					{/if}
 				</div>
 			</div>
 		</div>
@@ -109,6 +191,30 @@
 					>
 						About
 					</a>
+					
+					{#if data.isAuthenticated && data.user}
+						<div class="border-t pt-2 mt-2">
+							<div class="px-4 py-2 text-sm text-gray-500">
+								{data.user.name}님
+							</div>
+							<button
+								on:click={() => { handleLogout(); toggleMobileMenu(); }}
+								class="block w-full text-left rounded-lg px-4 py-3 text-gray-700 transition-colors duration-200 hover:bg-gray-50"
+							>
+								로그아웃
+							</button>
+						</div>
+					{:else}
+						<div class="border-t pt-2 mt-2">
+							<a
+								href="/login"
+								class="block rounded-lg px-4 py-3 text-primary font-medium transition-colors duration-200 hover:bg-gray-50"
+								on:click={toggleMobileMenu}
+							>
+								로그인
+							</a>
+						</div>
+					{/if}
 				</nav>
 			</div>
 		{/if}

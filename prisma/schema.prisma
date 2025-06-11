@@ -1,0 +1,70 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// 사용자 모델
+model User {
+  id           String    @id @default(uuid())
+  email        String    @unique
+  passwordHash String
+  name         String
+  role         String    @default("USER")
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  reviews      Review[]
+  comments     Comment[]
+}
+
+// 리뷰 모델
+model Review {
+  id          String    @id @default(uuid())
+  title       String
+  content     String
+  rating      Float     @default(0.0)
+  published   Boolean   @default(false)
+  authorId    String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  author      User      @relation(fields: [authorId], references: [id])
+  comments    Comment[]
+  images      Image[]
+  tags        Tag[]     @relation("ReviewToTag")
+}
+
+// 댓글 모델
+model Comment {
+  id        String   @id @default(uuid())
+  content   String
+  reviewId  String
+  authorId  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  review    Review   @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+  author    User     @relation(fields: [authorId], references: [id])
+}
+
+// 이미지 모델
+model Image {
+  id       String @id @default(uuid())
+  url      String
+  reviewId String
+  review   Review @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+}
+
+// 태그 모델
+model Tag {
+  id      String   @id @default(uuid())
+  name    String   @unique
+  reviews Review[] @relation("ReviewToTag")
+}
