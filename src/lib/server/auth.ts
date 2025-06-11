@@ -30,14 +30,14 @@ export async function authenticateUser(email: string, password: string) {
         });
 
         if (!user) {
-            return { success: false, message: '사용자를 찾을 수 없습니다.' };
+            return { success: false, message: '이메일 또는 비밀번호가 올바르지 않습니다.' };
         }
 
         // 비밀번호 검증
         const isValidPassword = await verifyPassword(password, user.passwordHash);
         
         if (!isValidPassword) {
-            return { success: false, message: '비밀번호가 올바르지 않습니다.' };
+            return { success: false, message: '이메일 또는 비밀번호가 올바르지 않습니다.' };
         }
 
         // 성공 시 비밀번호 해시는 제외하고 반환
