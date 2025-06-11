@@ -1,6 +1,5 @@
 import { fail } from '@sveltejs/kit';
-import bcrypt from 'bcrypt';
-import { prisma } from '$lib/server/db';
+import { createUser, checkNickname } from '$lib/server/auth.js';
 import type { Actions } from './$types';
 
 export const actions: Actions = {
@@ -58,55 +57,24 @@ export const actions: Actions = {
     }
 
     try {
-      // 이메일 중복 확인
-      const existingUser = await prisma.user.findUnique({
-        where: { email }
-      });
+      // auth.ts의 createUser 함수 사용
+      const result = await createUser(email, password, name);
 
-      if (existingUser) {
+      if (!result.success) {
         return fail(400, {
-          message: '이미 존재하는 이메일입니다.',
+          message: result.message,
           email,
           name
         });
       }
 
-      // 닉네임 중복 확인
-      const existingName = await prisma.user.findFirst({
-        where: { name }
-      });
-
-      if (existingName) {
-        return fail(400, {
-          message: '이미 존재하는 닉네임입니다.',
-          email,
-          name
-        });
-      }
-
-      // 비밀번호 해싱
-      const passwordHash = await bcrypt.hash(password, 10);
-
-      // 사용자 생성
-      const user = await prisma.user.create({
-        data: {
-          email,
-          passwordHash,
-          name,
-          role: 'USER'
-        }
-      });
-
-      console.log('새 사용자 생성:', user.email);
+      console.log('새 사용자 생성:', result.user?.email);
 
       // 회원가입 성공 응답
       return {
         success: true,
-        message: '회원가입이 완료되었습니다!',
-        user: {
-          email: user.email,
-          name: user.name
-        }
+        message: result.message,
+        user: result.user
       };
 
     } catch (error) {
@@ -131,19 +99,13 @@ export const actions: Actions = {
       return fail(400, { message: '닉네임은 2자 이상 8자 이하여야 합니다.' });
     }
 
-    try {
-      const existingName = await prisma.user.findFirst({
-        where: { name }
-      });
-
-      if (existingName) {
-        return fail(400, { message: '이미 존재하는 닉네임입니다.' });
-      }
-
-      return { success: true, message: '사용 가능한 닉네임입니다.' };
-    } catch (error) {
-      console.error('닉네임 확인 오류:', error);
-      return fail(500, { message: '닉네임 확인 중 오류가 발생했습니다.' });
+    // auth.ts의 checkNickname 함수 사용
+    const result = await checkNickname(name);
+    
+    if (!result.success) {
+      return fail(400, { message: result.message });
     }
+
+    return { success: true, message: result.message };
   }
 }; 

@@ -13,27 +13,50 @@ async function main() {
   await prisma.user.deleteMany();
   await prisma.tag.deleteMany();
 
-  console.log('관리자 계정 생성 중...');
-
-  // 관리자 비밀번호 해싱
-  const passwordHash = await bcrypt.hash('admin123!', 10);
+  console.log('사용자 계정들 생성 중...');
 
   // 관리자 계정 생성
+  const adminPasswordHash = await bcrypt.hash('admin123!', 10);
   const adminUser = await prisma.user.create({
     data: {
       email: 'root@testtest.test',
-      passwordHash: passwordHash,
+      passwordHash: adminPasswordHash,
       name: '관리자',
       role: 'ADMIN'
     }
   });
 
-  console.log('관리자 계정이 생성되었습니다:');
-  console.log({
+  // 테스트용 일반 사용자들 생성
+  const testUsers = [
+    {
+      email: 'test@example.com',
+      password: 'test123!',
+      name: '임시사용자'
+    }
+  ];
+
+  for (const userData of testUsers) {
+    const passwordHash = await bcrypt.hash(userData.password, 10);
+    await prisma.user.create({
+      data: {
+        email: userData.email,
+        passwordHash: passwordHash,
+        name: userData.name,
+        role: 'USER'
+      }
+    });
+  }
+
+  console.log('생성된 계정들:');
+  console.log('관리자:', {
     email: adminUser.email,
     name: adminUser.name,
-    role: adminUser.role,
-    createdAt: adminUser.createdAt
+    role: adminUser.role
+  });
+  
+  console.log('테스트 사용자들:');
+  testUsers.forEach(user => {
+    console.log(`- 이메일: ${user.email}, 비밀번호: ${user.password}, 이름: ${user.name}`);
   });
 
   // 선택사항: 샘플 태그 생성
