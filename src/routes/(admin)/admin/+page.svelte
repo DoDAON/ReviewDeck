@@ -1,4 +1,8 @@
 <script lang="ts">
+	import type { PageData } from './$types';
+
+	export let data: PageData;
+
 	interface User {
 		id: string;
 		email: string;
@@ -10,6 +14,9 @@
 		user: User | null;
 		isAuthenticated: boolean;
 	}
+
+	// 서버에서 로드한 통계 데이터
+	const { stats } = data;
 </script>
 
 <svelte:head>
@@ -34,7 +41,7 @@
 				</div>
 				<div class="ml-4">
 					<h3 class="text-lg font-semibold text-gray-900">총 게시물</h3>
-					<p class="text-2xl font-bold text-emerald-600">1,456</p>
+					<p class="text-2xl font-bold text-emerald-600">{stats.totalPosts.toLocaleString()}</p>
 				</div>
 			</div>
 		</div>
@@ -48,7 +55,7 @@
 				</div>
 				<div class="ml-4">
 					<h3 class="text-lg font-semibold text-gray-900">총 태그</h3>
-					<p class="text-2xl font-bold text-purple-600">89</p>
+					<p class="text-2xl font-bold text-purple-600">{stats.totalTags.toLocaleString()}</p>
 				</div>
 			</div>
 		</div>
@@ -62,7 +69,7 @@
 				</div>
 				<div class="ml-4">
 					<h3 class="text-lg font-semibold text-gray-900">총 유저</h3>
-					<p class="text-2xl font-bold text-blue-600">1,234</p>
+					<p class="text-2xl font-bold text-blue-600">{stats.totalUsers.toLocaleString()}</p>
 				</div>
 			</div>
 		</div>

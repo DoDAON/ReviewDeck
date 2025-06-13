@@ -1,6 +1,7 @@
 import { getSessionFromCookies, validateSession } from '$lib/server/session.js';
+import type { Cookies } from '@sveltejs/kit';
 
-export const load = async ({ cookies }) => {
+export const load = async ({ cookies }: { cookies: Cookies }) => {
     const sessionId = getSessionFromCookies(cookies);
     
     if (!sessionId) {

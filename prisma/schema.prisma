@@ -22,7 +22,6 @@ model User {
   role         String    @default("USER")
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
-  reviews      Review[]
   comments     Comment[]
 }
 
@@ -31,12 +30,11 @@ model Review {
   id          String    @id @default(uuid())
   title       String
   content     String
+  author      String    // 관리자가 임의로 부여한 작성자 이름
   rating      Float     @default(0.0)
   published   Boolean   @default(false)
-  authorId    String
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
-  author      User      @relation(fields: [authorId], references: [id])
   comments    Comment[]
   images      Image[]
   tags        Tag[]     @relation("ReviewToTag")

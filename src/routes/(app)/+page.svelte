@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { PageData } from './$types';
 	import { Button, MainReviewCard } from '$lib';
+	
 	export let data: PageData;
 
 	let featuredReviews = data.featuredReviews

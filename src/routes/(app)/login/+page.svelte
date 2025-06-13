@@ -2,9 +2,8 @@
     import { enhance } from '$app/forms';
     import { onMount } from 'svelte';
     import { browser } from '$app/environment';
-    import type { ActionData, PageData } from './$types';
+    import type { ActionData } from './$types';
 
-    export let data: PageData;
     export let form: ActionData;
 
     let isLoading = false;

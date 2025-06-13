@@ -72,7 +72,7 @@
 									{#if showUserId}
 										<!-- 눈 감은 아이콘 (숨기기) -->
 										<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21"></path>
+											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.9 4.24A9.12 9.12 0 0112 4c7.2 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24M1 1l22 22m-2-2l-7.02-7.02M5.45 5.11L2 8"></path>
 										</svg>
 									{:else}
 										<!-- 눈 뜬 아이콘 (보기) -->

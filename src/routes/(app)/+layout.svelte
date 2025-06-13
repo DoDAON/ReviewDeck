@@ -1,5 +1,5 @@
 <script lang="ts">
-	import '../app.css';
+	import '../../app.css';
 	import { slide, fade } from 'svelte/transition';
 	import { Button } from '$lib';
 	import { invalidateAll } from '$app/navigation';

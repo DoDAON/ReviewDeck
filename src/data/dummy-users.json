@@ -1,0 +1,14 @@
+[
+  {
+    "email": "root@testtest.test",
+    "password": "admin123!",
+    "name": "관리자",
+    "role": "ADMIN"
+  },
+  {
+    "email": "test@example.com", 
+    "password": "test123!",
+    "name": "임시사용자",
+    "role": "USER"
+  }
+] 
