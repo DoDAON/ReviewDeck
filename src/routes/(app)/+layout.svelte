@@ -20,6 +20,7 @@
 
 	let isMobileMenuOpen = false;
 	let showUserMenu = false;
+	let isLoggingOut = false;
 
 	function toggleMobileMenu() {
 		isMobileMenuOpen = !isMobileMenuOpen;
@@ -30,6 +31,8 @@
 	}
 
 	async function handleLogout() {
+		isLoggingOut = true;
+		
 		try {
 			const response = await fetch('/api/logout', {
 				method: 'POST',
@@ -41,9 +44,13 @@
 			if (response.ok) {
 				showUserMenu = false;
 				await invalidateAll(); // 모든 데이터를 다시 로드
+				// 메인 페이지로 리다이렉트
+				window.location.href = '/';
 			}
 		} catch (error) {
 			console.error('Logout failed:', error);
+		} finally {
+			isLoggingOut = false;
 		}
 	}
 
@@ -152,9 +159,20 @@
 								</a>
 								<button
 									on:click={handleLogout}
-									class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+									disabled={isLoggingOut}
+									class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
 								>
-									로그아웃
+									{#if isLoggingOut}
+										<span class="flex items-center">
+											<svg class="animate-spin -ml-1 mr-2 h-3 w-3 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+												<circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+												<path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+											</svg>
+											로그아웃 중...
+										</span>
+									{:else}
+										로그아웃
+									{/if}
 								</button>
 							</div>
 						{/if}
@@ -202,9 +220,20 @@
 							</div>
 							<button
 								on:click={() => { handleLogout(); toggleMobileMenu(); }}
-								class="block w-full text-left rounded-lg px-4 py-3 text-gray-700 transition-colors duration-200 hover:bg-gray-50"
+								disabled={isLoggingOut}
+								class="block w-full text-left rounded-lg px-4 py-3 text-gray-700 transition-colors duration-200 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
 							>
-								로그아웃
+								{#if isLoggingOut}
+									<span class="flex items-center">
+										<svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+											<circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+											<path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+										</svg>
+										로그아웃 중...
+									</span>
+								{:else}
+									로그아웃
+								{/if}
 							</button>
 						</div>
 					{:else}
