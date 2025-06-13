@@ -14,6 +14,13 @@
 	}
 
 	export let data: ProfileData;
+	
+	// 사용자 ID 표시/숨기기 상태
+	let showUserId = false;
+	
+	function toggleUserId() {
+		showUserId = !showUserId;
+	}
 </script>
 
 <svelte:head>
@@ -47,13 +54,34 @@
 						<div>
 							<div class="block text-sm font-medium text-gray-700 mb-1">사용자 유형</div>
 							<div class="p-3 bg-gray-50 rounded-md text-gray-900">
-								{data.user.role === 'admin' ? '관리자' : '일반 사용자'}
+								{data.user.role === 'ADMIN' ? '관리자' : '일반 사용자'}
 							</div>
 						</div>
 						<div>
 							<div class="block text-sm font-medium text-gray-700 mb-1">사용자 ID</div>
-							<div class="p-3 bg-gray-50 rounded-md text-gray-600 text-sm">
-								{data.user.id}
+							<div class="p-3 bg-gray-50 rounded-md text-gray-600 text-sm flex items-center justify-between">
+								<span class="font-mono">
+									{showUserId ? data.user.id : '••••••••••••••••••••••••••••••••'}
+								</span>
+								<button
+									on:click={toggleUserId}
+									class="ml-2 p-1 text-gray-500 hover:text-gray-700 transition-colors"
+									type="button"
+									title={showUserId ? 'ID 숨기기' : 'ID 보기'}
+								>
+									{#if showUserId}
+										<!-- 눈 감은 아이콘 (숨기기) -->
+										<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21"></path>
+										</svg>
+									{:else}
+										<!-- 눈 뜬 아이콘 (보기) -->
+										<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+										</svg>
+									{/if}
+								</button>
 							</div>
 						</div>
 					</div>

@@ -49,7 +49,7 @@
 	}
 
 	// 관리자 권한 확인
-	$: isAdmin = data.user?.role === 'admin';
+	$: isAdmin = data.user?.role === 'ADMIN';
 
 	// 현재 경로에 따른 활성 메뉴 확인
 	$: currentPath = $page.url.pathname;
