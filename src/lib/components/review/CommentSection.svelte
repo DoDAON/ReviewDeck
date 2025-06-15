@@ -1,5 +1,6 @@
 <script lang="ts">
   import { Button } from '$lib';
+  import { onMount } from 'svelte';
   
   interface Comment {
     id: string;
@@ -8,8 +9,38 @@
     createdAt: string;
   }
   
+  export let reviewId: string;
   export let comments: Comment[] = [];
   export let newComment = '';
+  
+  let isSubmitting = false;
+  let isLoading = false;
+  
+  // 댓글 목록 로드
+  async function loadComments() {
+    if (!reviewId) return;
+    
+    isLoading = true;
+    try {
+      const response = await fetch(`/api/reviews/${reviewId}/comments`);
+      const data = await response.json();
+      
+      if (data.success) {
+        comments = data.comments;
+      } else {
+        console.error('댓글 로드 실패:', data.error);
+      }
+    } catch (error) {
+      console.error('댓글 로드 중 오류:', error);
+    } finally {
+      isLoading = false;
+    }
+  }
+  
+  // 컴포넌트 마운트 시 댓글 로드
+  onMount(() => {
+    loadComments();
+  });
   
   function formatDate(dateString: string) {
     const date = new Date(dateString);
@@ -22,7 +53,7 @@
     }).format(date);
   }
   
-  function handleCommentSubmit() {
+  async function handleCommentSubmit() {
     const trimmedComment = newComment.trim();
     
     if (!trimmedComment || trimmedComment.length < 5) {
@@ -30,8 +61,42 @@
       return;
     }
     
-    alert('댓글이 작성되었습니다!');
-    newComment = '';
+    if (isSubmitting) return;
+    
+    isSubmitting = true;
+    
+    try {
+      const response = await fetch('/api/comments', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          content: trimmedComment,
+          reviewId
+        })
+      });
+      
+      const data = await response.json();
+      
+      if (data.success) {
+        // 댓글 작성 완료 알림
+        alert('댓글이 작성되었습니다!');
+        
+        // 입력 필드 초기화
+        newComment = '';
+        
+        // 댓글 목록 다시 로드
+        await loadComments();
+      } else {
+        alert(data.error || '댓글 작성에 실패했습니다');
+      }
+    } catch (error) {
+      console.error('댓글 작성 중 오류:', error);
+      alert('댓글 작성 중 오류가 발생했습니다');
+    } finally {
+      isSubmitting = false;
+    }
   }
 </script>
 
@@ -50,24 +115,35 @@
       <Button
         variant="primary"
         on:click={handleCommentSubmit}
+        disabled={isSubmitting}
       >
-        댓글 작성
+        {isSubmitting ? '작성 중...' : '댓글 작성'}
       </Button>
     </div>
   </div>
   
   <!-- 댓글 목록 -->
-  <div class="space-y-6">
-    {#each comments as comment}
-      <div class="bg-gray-50 rounded-lg p-4">
-        <div class="flex justify-between items-start mb-2">
-          <span class="font-medium text-gray-900">{comment.author}</span>
-          <span class="text-sm text-gray-500">{formatDate(comment.createdAt)}</span>
+  {#if isLoading}
+    <div class="flex justify-center py-8">
+      <div class="text-gray-500">댓글을 불러오는 중...</div>
+    </div>
+  {:else}
+    <div class="space-y-6">
+      {#each comments as comment}
+        <div class="bg-gray-50 rounded-lg p-4">
+          <div class="flex justify-between items-start mb-2">
+            <span class="font-medium text-gray-900">{comment.author}</span>
+            <span class="text-sm text-gray-500">{formatDate(comment.createdAt)}</span>
+          </div>
+          <p class="text-gray-700">{comment.content}</p>
         </div>
-        <p class="text-gray-700">{comment.content}</p>
-      </div>
-    {/each}
-  </div>
+      {:else}
+        <div class="text-center py-8 text-gray-500">
+          아직 댓글이 없습니다. 첫 번째 댓글을 작성해보세요!
+        </div>
+      {/each}
+    </div>
+  {/if}
 </div>
 
 <style>

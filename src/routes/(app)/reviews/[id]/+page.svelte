@@ -27,44 +27,6 @@
   export let data: PageData;
   
   let { review } = data;
-  let newComment = '';
-  
-  function formatDate(dateString: string) {
-    const date = new Date(dateString);
-    return new Intl.DateTimeFormat('ko-KR', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    }).format(date);
-  }
-  
-  function getRatingColor(rating: number) {
-    if (rating >= 4.5) return 'text-green-600';
-    if (rating >= 4.0) return 'text-green-500';
-    if (rating >= 3.5) return 'text-yellow-500';
-    if (rating >= 3.0) return 'text-yellow-600';
-    return 'text-red-500';
-  }
-  
-  const tagColors: Record<string, string> = {
-    '음악': 'bg-blue-100 text-blue-800',
-    '영화': 'bg-purple-100 text-purple-800',
-    '도서': 'bg-green-100 text-green-800',
-    '게임': 'bg-red-100 text-red-800',
-    '드라마': 'bg-yellow-100 text-yellow-800'
-  };
-  
-  function getTagColor(tag: string) {
-    return tagColors[tag] || 'bg-gray-100 text-gray-800';
-  }
-  
-  function handleCommentSubmit() {
-    // TODO: 실제 댓글 제출 로직 구현
-    console.log('댓글 제출:', newComment);
-    newComment = '';
-  }
 </script>
 
 <div class="container mx-auto px-4 py-8">
@@ -78,7 +40,7 @@
     </div>
     
     <!-- 댓글 섹션 -->
-    <CommentSection comments={review.comments} bind:newComment />
+    <CommentSection reviewId={review.id} />
   </div>
 </div>
 
