@@ -113,9 +113,9 @@
 
 				<!-- 이메일 (읽기 전용) -->
 				<div>
-					<label class="block text-sm font-medium text-gray-700 mb-2">
+					<div class="block text-sm font-medium text-gray-700 mb-2">
 						이메일 (아이디)
-					</label>
+					</div>
 					<div class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-500">
 						{data.user.email}
 					</div>
