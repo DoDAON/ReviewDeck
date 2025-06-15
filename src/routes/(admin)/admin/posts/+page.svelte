@@ -294,8 +294,7 @@
 						-
 						<span class="font-medium">
 							{Math.min(currentPage * itemsPerPage, filteredReviews.length)}
-						</span>
-						개 표시
+						</span> 표시
 					</p>
 				</div>
 				<div>
