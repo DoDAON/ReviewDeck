@@ -8,12 +8,13 @@ const prisma = new PrismaClient();
 async function main() {
   console.log('기존 데이터 삭제 중...');
   
-  // 모든 데이터 삭제 (연관된 데이터도 함께)
-  await prisma.comment.deleteMany();
-  await prisma.image.deleteMany();
-  await prisma.review.deleteMany();
-  await prisma.user.deleteMany();
-  await prisma.tag.deleteMany();
+  // 모든 데이터 삭제 (연관된 데이터도 함께) - 외래 키 제약 조건을 고려한 순서
+  await prisma.like.deleteMany();    // Like 먼저 삭제 (User, Review 참조)
+  await prisma.comment.deleteMany(); // Comment 삭제 (User, Review 참조)
+  await prisma.image.deleteMany();   // Image 삭제 (Review 참조)
+  await prisma.review.deleteMany();  // Review 삭제 (Tag 참조)
+  await prisma.user.deleteMany();    // User 삭제
+  await prisma.tag.deleteMany();     // Tag 삭제
 
   console.log('JSON 더미 데이터 로드 중...');
 
@@ -61,6 +62,7 @@ async function main() {
   console.log('리뷰 및 댓글 생성 중...');
 
   // 리뷰 생성 (모든 리뷰는 관리자가 작성하되, author는 임의의 이름)
+  const createdReviews: any[] = [];
   for (const reviewData of reviewsData) {
     // 태그 찾기
     const tag = createdTags.find(t => t.name === reviewData.tag);
@@ -84,6 +86,8 @@ async function main() {
         }
       }
     });
+
+    createdReviews.push(review);
 
     // 댓글 생성 (실제 사용자가 작성)
     if (reviewData.comments && reviewData.comments.length > 0) {
@@ -109,6 +113,30 @@ async function main() {
     }
   }
 
+  console.log('좋아요 데이터 생성 중...');
+
+  // 임시사용자가 몇몇 리뷰에 좋아요를 누른 데이터 생성
+  const regularUser = createdUsers.find(user => user.role === 'USER');
+  if (regularUser && createdReviews.length > 0) {
+    // 평점이 4.0 이상인 리뷰들에 좋아요 추가
+    const highRatingReviews = createdReviews.filter((_, index) => 
+      reviewsData[index]?.rating >= 4.0
+    );
+
+    for (let i = 0; i < Math.min(highRatingReviews.length, 5); i++) {
+      const review = highRatingReviews[i];
+      const reviewData = reviewsData.find(r => r.title === review.title);
+      
+      await prisma.like.create({
+        data: {
+          userId: regularUser.id,
+          reviewId: review.id,
+          createdAt: reviewData ? new Date(reviewData.createdAt) : new Date()
+        }
+      });
+    }
+  }
+
   console.log('데이터 시드 완료!');
   console.log('=== 생성된 데이터 요약 ===');
   console.log(`실제 사용자: ${createdUsers.length}명 (관리자 1명, 임시사용자 1명)`);
@@ -118,6 +146,10 @@ async function main() {
   // 총 댓글 수 계산
   const totalComments = reviewsData.reduce((sum, review) => sum + (review.comments?.length || 0), 0);
   console.log(`댓글: ${totalComments}개 (임시사용자가 작성)`);
+
+  // 좋아요 수 계산
+  const totalLikes = await prisma.like.count();
+  console.log(`좋아요: ${totalLikes}개 (임시사용자가 평점 4.0 이상 리뷰에 좋아요)`);
 
   console.log('\n=== 실제 생성된 계정 정보 ===');
   createdUsers.forEach(user => {

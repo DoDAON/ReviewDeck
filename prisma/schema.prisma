@@ -23,6 +23,7 @@ model User {
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
   comments     Comment[]
+  likes        Like[]
 }
 
 // 리뷰 모델
@@ -38,6 +39,7 @@ model Review {
   comments    Comment[]
   images      Image[]
   tags        Tag[]     @relation("ReviewToTag")
+  likes       Like[]
 }
 
 // 댓글 모델
@@ -50,6 +52,18 @@ model Comment {
   updatedAt DateTime @updatedAt
   review    Review   @relation(fields: [reviewId], references: [id], onDelete: Cascade)
   author    User     @relation(fields: [authorId], references: [id])
+}
+
+// 좋아요 모델
+model Like {
+  id       String   @id @default(uuid())
+  userId   String
+  reviewId String
+  createdAt DateTime @default(now())
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  review   Review   @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, reviewId])
 }
 
 // 이미지 모델
