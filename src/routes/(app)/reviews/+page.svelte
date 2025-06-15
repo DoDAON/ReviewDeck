@@ -25,8 +25,10 @@
   let searchQuery = '';
   let sortBy = 'newest'; // 'newest', 'rating', 'title'
   let selectedRating: number | null = null;
+  let currentPage = 1;
+  const itemsPerPage = 9;
   
-  $: filteredReviews = reviews
+  $: allFilteredReviews = reviews
     .filter((review: Review) => {
       // 태그 필터링
       if (selectedTag && review.tag !== selectedTag) return false;
@@ -65,6 +67,35 @@
           return 0;
       }
     });
+
+  $: totalPages = Math.ceil(allFilteredReviews.length / itemsPerPage);
+  $: filteredReviews = allFilteredReviews.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  // 필터가 변경될 때마다 첫 페이지로 이동
+  $: if (selectedTag || searchQuery || sortBy || selectedRating !== null) {
+    currentPage = 1;
+  }
+
+  function goToPage(page: number) {
+    if (page >= 1 && page <= totalPages) {
+      currentPage = page;
+    }
+  }
+
+  function nextPage() {
+    if (currentPage < totalPages) {
+      currentPage++;
+    }
+  }
+
+  function prevPage() {
+    if (currentPage > 1) {
+      currentPage--;
+    }
+  }
   
   function formatDate(dateString: string) {
     const date = new Date(dateString);
@@ -116,14 +147,59 @@
   />
   
   <!-- 리뷰 그리드 -->
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
     {#each filteredReviews as review}
       <ReviewCard {review} />
     {/each}
   </div>
   
+  <!-- 페이지네이션 -->
+  {#if totalPages > 1}
+    <div class="flex justify-center items-center gap-2 mt-8">
+      <!-- 이전 페이지 버튼 -->
+      <button
+        on:click={prevPage}
+        disabled={currentPage === 1}
+        class="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        이전
+      </button>
+      
+      <!-- 페이지 번호 -->
+      {#each Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+        const startPage = Math.max(1, Math.min(totalPages - 4, currentPage - 2));
+        return startPage + i;
+      }) as page}
+        {#if page <= totalPages}
+          <button
+            on:click={() => goToPage(page)}
+            class="px-3 py-2 text-sm font-medium {page === currentPage 
+              ? 'text-white bg-primary border border-primary' 
+              : 'text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700'} rounded-lg"
+          >
+            {page}
+          </button>
+        {/if}
+      {/each}
+      
+      <!-- 다음 페이지 버튼 -->
+      <button
+        on:click={nextPage}
+        disabled={currentPage === totalPages}
+        class="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        다음
+      </button>
+    </div>
+    
+    <!-- 페이지 정보 -->
+    <div class="text-center mt-4 text-sm text-gray-600">
+      총 {allFilteredReviews.length}개 중 {(currentPage - 1) * itemsPerPage + 1}-{Math.min(currentPage * itemsPerPage, allFilteredReviews.length)} 표시 (페이지 {currentPage}/{totalPages})
+    </div>
+  {/if}
+  
   <!-- 결과가 없을 때 -->
-  {#if filteredReviews.length === 0}
+  {#if allFilteredReviews.length === 0}
     <div class="text-center py-12">
       <p class="text-gray-500 text-lg">검색 결과가 없습니다.</p>
     </div>
