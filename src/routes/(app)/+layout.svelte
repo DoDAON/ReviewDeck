@@ -61,9 +61,6 @@
 		}
 	}
 
-	// 프로필 페이지 경로 결정 함수
-	$: profilePath = data.user?.role === 'ADMIN' ? '/admin' : '/profile';
-
 	// 모바일 메뉴가 열려있을 때 스크롤 방지
 	$: if (typeof document !== 'undefined') {
 		if (isMobileMenuOpen) {
@@ -150,13 +147,30 @@
 								tabindex="-1"
 								transition:slide={{ duration: 150 }}
 							>
-								<a
-									href={profilePath}
-									class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-									on:click={() => showUserMenu = false}
-								>
-									{data.user?.role === 'ADMIN' ? '관리자 페이지' : '프로필'}
-								</a>
+								{#if data.user?.role === 'ADMIN'}
+									<a
+										href="/admin"
+										class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+										on:click={() => showUserMenu = false}
+									>
+										관리자 페이지
+									</a>
+									<a
+										href="/profile"
+										class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+										on:click={() => showUserMenu = false}
+									>
+										프로필
+									</a>
+								{:else}
+									<a
+										href="/profile"
+										class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+										on:click={() => showUserMenu = false}
+									>
+										프로필
+									</a>
+								{/if}
 								<button
 									on:click={handleLogout}
 									disabled={isLoggingOut}
@@ -198,13 +212,30 @@
 					>
 						리뷰
 					</a>
-					<a
-						href={profilePath}
-						class="block rounded-lg px-4 py-3 text-gray-700 transition-colors duration-200 hover:bg-gray-50"
-						on:click={toggleMobileMenu}
-					>
-						{data.user?.role === 'ADMIN' ? '관리자 페이지' : '프로필'}
-					</a>
+					{#if data.user?.role === 'ADMIN'}
+						<a
+							href="/admin"
+							class="block rounded-lg px-4 py-3 text-gray-700 transition-colors duration-200 hover:bg-gray-50"
+							on:click={toggleMobileMenu}
+						>
+							관리자 페이지
+						</a>
+						<a
+							href="/profile"
+							class="block rounded-lg px-4 py-3 text-gray-700 transition-colors duration-200 hover:bg-gray-50"
+							on:click={toggleMobileMenu}
+						>
+							프로필
+						</a>
+					{:else}
+						<a
+							href="/profile"
+							class="block rounded-lg px-4 py-3 text-gray-700 transition-colors duration-200 hover:bg-gray-50"
+							on:click={toggleMobileMenu}
+						>
+							프로필
+						</a>
+					{/if}
 					<a
 						href="/about"
 						class="block rounded-lg px-4 py-3 text-gray-700 transition-colors duration-200 hover:bg-gray-50"
