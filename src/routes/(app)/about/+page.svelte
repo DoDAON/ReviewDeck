@@ -101,69 +101,13 @@
 											clip-rule="evenodd"
 										/>
 									</svg>
-									이미지 갤러리로 풍부한 표현
+									댓글을 통한 사용자 경험 공유
 								</li>
 							</ul>
 						</div>
 					</div>
 				</div>
 
-				<!-- 개인화 추천 시스템 -->
-				<div
-					class="rounded-lg bg-white p-8 shadow-lg transition-shadow duration-300 hover:shadow-xl"
-				>
-					<div class="flex items-start">
-						<div class="rounded-full bg-[#059669] p-3">
-							<svg class="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-								<path
-									stroke-linecap="round"
-									stroke-linejoin="round"
-									stroke-width="2"
-									d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
-								/>
-							</svg>
-						</div>
-						<div class="ml-6">
-							<h2 class="mb-3 text-2xl font-semibold text-gray-900">개인화된 추천 시스템</h2>
-							<p class="mb-4 text-gray-700">
-								AI 기반의 추천 시스템이 당신의 취향을 학습하여 관심 있을 만한 리뷰들을 제안합니다.
-								더 이상 콘텐츠를 찾아 헤매지 마세요.
-							</p>
-							<ul class="space-y-2 text-gray-600">
-								<li class="flex items-center">
-									<svg class="mr-2 h-5 w-5 text-[#059669]" fill="currentColor" viewBox="0 0 20 20">
-										<path
-											fill-rule="evenodd"
-											d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-											clip-rule="evenodd"
-										/>
-									</svg>
-									사용자 취향 기반 맞춤 추천
-								</li>
-								<li class="flex items-center">
-									<svg class="mr-2 h-5 w-5 text-[#059669]" fill="currentColor" viewBox="0 0 20 20">
-										<path
-											fill-rule="evenodd"
-											d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-											clip-rule="evenodd"
-										/>
-									</svg>
-									관련 리뷰 자동 연결
-								</li>
-								<li class="flex items-center">
-									<svg class="mr-2 h-5 w-5 text-[#059669]" fill="currentColor" viewBox="0 0 20 20">
-										<path
-											fill-rule="evenodd"
-											d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-											clip-rule="evenodd"
-										/>
-									</svg>
-									실시간 인기 리뷰 제안
-								</li>
-							</ul>
-						</div>
-					</div>
-				</div>
 			</section>
 
 			<!-- Contact -->

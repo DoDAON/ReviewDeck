@@ -10,7 +10,6 @@
 </script>
 
 <div class="min-h-screen bg-[#F9FAFB]">
-	<!-- Hero Section -->
 	<section class="relative py-32">
 		<div class="container mx-auto px-4">
 			<div class="mx-auto max-w-3xl text-center">
@@ -34,8 +33,6 @@
 			</div>
 		</div>
 	</section>
-
-	<!-- Latest Reviews -->
 	<section class="bg-white py-20">
 		<div class="container mx-auto px-4">
 			<h2 class="mb-12 text-center text-3xl font-bold text-[#1F2937]">최신 리뷰</h2>
